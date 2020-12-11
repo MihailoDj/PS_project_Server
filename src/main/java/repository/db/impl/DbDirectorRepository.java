@@ -37,14 +37,11 @@ public class DbDirectorRepository implements DbRepository<Director>{
             ResultSet rs = statement.executeQuery(sql);
             
             while(rs.next()) {
-                Director director = new Director(){
-                    {
-                        setDirectorID(rs.getInt("directorID"));
-                        setFirstName(rs.getString("firstname"));
-                        setLastName(rs.getString("lastname"));
-                        setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
-                    }
-                };
+                Director director = new Director();
+                director.setDirectorID(rs.getInt("directorID"));
+                director.setFirstName(rs.getString("firstname"));
+                director.setLastName(rs.getString("lastname"));
+                director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
                 
                 directors.add(director);
             }

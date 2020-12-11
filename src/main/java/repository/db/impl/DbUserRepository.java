@@ -22,7 +22,7 @@ import repository.db.DbRepository;
  *
  * @author Mihailo
  */
-public class DbUserRepository implements DbRepository<User>{
+public class DbUserRepository implements DbRepository<User> {
 
     @Override
     public List<User> selectAll() throws Exception{
@@ -35,21 +35,23 @@ public class DbUserRepository implements DbRepository<User>{
             ResultSet rs = statement.executeQuery(sql);
             
             while (rs.next()) {
-                User user = new User() {
-                    {
-                        setUserID(rs.getInt("userID"));
-                        setUsername(rs.getString("username"));
-                        setPassword(rs.getString("password"));
-                        setAdmin(rs.getBoolean("admin"));
-                    }
-                };
+                User user = new User(); 
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setAdmin(rs.getBoolean("admin"));
+                    
                 users.add(user);
             }
             
+            rs.close();
+            statement.close();
+            
             return users;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             Logger.getLogger(DbUserRepository.class.getName()).log(Level.SEVERE, null, ex);
-            throw new Exception("Connection error!");
+            throw new Exception("Unable to login!");
         }
     }
 

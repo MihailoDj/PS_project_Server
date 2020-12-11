@@ -6,10 +6,7 @@
 package repository.db.impl;
 
 import domain.Role;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
-import repository.db.DbConnectionFactory;
 import repository.db.DbRepository;
 
 /**

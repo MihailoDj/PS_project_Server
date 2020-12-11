@@ -93,41 +93,36 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
             ResultSet rs = statement.executeQuery(sql);
             
             while (rs.next()) {
-                UserMovieCollection col = new UserMovieCollection() {
-                    {
-                        setMovie(new Movie() {
-                            {
-                                setMovieID(rs.getInt("movieID"));
-                                setName(rs.getString("name"));
-                                setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
-                                setDescription(rs.getString("description"));
-                                setScore(Math.floor(rs.getDouble("score")* 100) / 100);
-                                setDirector(new Director() {
-                                    {
-                                        setDirectorID(rs.getInt("directorID"));
-                                        setFirstName(rs.getString("firstname"));
-                                        setLastName(rs.getString("lastname"));
-                                        setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
-                                    }
-                                });
-                                setMoviePoster(new MoviePoster() {
-                                    {
-                                        setMoviePosterID(rs.getInt("movieposterID"));
-                                        setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
-                                    }
-                                });
-                            }
-                        });
-                        setUser(new User() {
-                            {
-                                setUserID(rs.getInt("userID"));
-                                setUsername(rs.getString("username"));
-                                setPassword(rs.getString("password"));
-                                setAdmin(rs.getBoolean("admin"));
-                            }
-                        });
-                    }
-                };
+                UserMovieCollection col = new UserMovieCollection();
+                
+                Movie movie = new Movie();
+                movie.setMovieID(rs.getInt("movieID"));
+                movie.setName(rs.getString("name"));
+                movie.setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
+                movie.setDescription(rs.getString("description"));
+                movie.setScore(Math.floor(rs.getDouble("score")* 100) / 100);
+                
+                Director director = new Director();
+                director.setDirectorID(rs.getInt("directorID"));
+                director.setFirstName(rs.getString("firstname"));
+                director.setLastName(rs.getString("lastname"));
+                director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
+                
+                movie.setDirector(director);
+                
+                MoviePoster moviePoster = new MoviePoster();
+                moviePoster.setMoviePosterID(rs.getInt("movieposterID"));
+                moviePoster.setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
+                
+                User user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setAdmin(rs.getBoolean("admin"));
+                
+                col.setMovie(movie);
+                col.setMovie(movie);
+                
                 loadAssociationClasses(col.getMovie());
                 collection.add(col);
             }
@@ -189,41 +184,37 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
     }
     
     private Role loadRole(ResultSet rs) throws Exception{
-        Role role = new Role() {
-            {
-                setRoleName(rs.getString("rolename"));
-                setActor(new Actor() { {
-                    setActorID(rs.getInt("actorID"));
-                    setFirstName(rs.getString("firstname"));
-                    setLastName(rs.getString("lastname"));
-                    setBiography(rs.getString("biography"));
-                }});
-            }  
-        };
+        Actor actor = new Actor();
+        actor.setActorID(rs.getInt("actorID"));
+        actor.setFirstName(rs.getString("firstname"));
+        actor.setLastName(rs.getString("lastname"));
+        actor.setBiography(rs.getString("biography"));
+                    
+        Role role = new Role();
+        role.setRoleName(rs.getString("rolename"));
+        role.setActor(actor);
+                
         return role;
     }
     
     private MovieGenre loadMovieGenre(ResultSet rs) throws Exception{
-        MovieGenre movieGenre = new MovieGenre() {
-            {
-                setGenre(new Genre() { {
-                    setGenreID(rs.getInt("ggenreID"));
-                    setName(rs.getString("gname"));
-                }});
-            }  
-        };
+        Genre genre = new Genre();
+        genre.setGenreID(rs.getInt("ggenreID"));
+        genre.setName(rs.getString("gname"));
+        
+        MovieGenre movieGenre = new MovieGenre();
+        movieGenre.setGenre(genre);
         return movieGenre;
     }
     
     private Production loadProduction(ResultSet rs) throws Exception{
-        Production production = new Production() {
-            {
-                setProductionCompany(new ProductionCompany() { {
-                    setProductionCompanyID(rs.getInt("pcID"));
-                    setName(rs.getString("pcname"));
-                }});
-            }  
-        };
+        ProductionCompany pc=  new ProductionCompany();
+        pc.setProductionCompanyID(rs.getInt("pcID"));
+        pc.setName(rs.getString("pcname"));
+        
+        Production production = new Production();
+        production.setProductionCompany(pc);
+        
         return production;
     }
 }

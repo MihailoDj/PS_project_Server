@@ -59,12 +59,10 @@ public class DbProductionCompanyRepository implements DbRepository<ProductionCom
             ResultSet rs = statement.executeQuery(sql);
             
             while (rs.next()) {
-                ProductionCompany productionCompany = new ProductionCompany() {
-                    {
-                        setProductionCompanyID(rs.getInt("pcID"));
-                        setName(rs.getString("name"));
-                    }
-                };
+                ProductionCompany productionCompany = new ProductionCompany();
+                productionCompany.setProductionCompanyID(rs.getInt("pcID"));
+                productionCompany.setName(rs.getString("name"));
+                
                 productionCompanies.add(productionCompany);
             }
             

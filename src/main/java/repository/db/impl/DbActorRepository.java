@@ -35,14 +35,11 @@ public class DbActorRepository implements DbRepository<Actor>{
             ResultSet rs = statement.executeQuery(sql);
             
             while(rs.next()) {
-                Actor actor = new Actor(){
-                    {
-                        setActorID(rs.getInt("actorID"));
-                        setFirstName(rs.getString("firstname"));
-                        setLastName(rs.getString("lastname"));
-                        setBiography(rs.getString("biography"));
-                    }
-                };
+                Actor actor = new Actor();
+                actor.setActorID(rs.getInt("actorID"));
+                actor.setFirstName(rs.getString("firstname"));
+                actor.setLastName(rs.getString("lastname"));
+                actor.setBiography(rs.getString("biography"));
                 
                 actors.add(actor);
             }

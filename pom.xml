@@ -11,6 +11,11 @@
             <artifactId>PS_project_Common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>jdbc_driver</groupId>
+            <artifactId>jdbc_driver</artifactId>
+            <version>8.0.2.2</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
