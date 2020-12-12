@@ -81,7 +81,7 @@ public class Server {
                         break;
                     case DELETE_MOVIE:
                         Movie movieDelete = (Movie)request.getArgument();
-                        Controller.getInstance().insertMovie(movieDelete);
+                        Controller.getInstance().deleteMovie(movieDelete);
                         break;
                     case SELECT_ALL_DIRECTORS:
                         response.setResult(Controller.getInstance().selectAllDirectors());
