@@ -106,7 +106,7 @@ public class DbActorRepository implements DbRepository<Actor>{
     }
 
     @Override
-    public List<Actor> select(String criteria) throws Exception {
+    public List<Actor> select(Actor obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

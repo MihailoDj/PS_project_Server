@@ -75,7 +75,7 @@ public class Controller {
         throw new Exception("User doesn't exist.");
     }
     
-    public List<User> selectUser(String user) throws Exception{
+    public List<User> selectUser(User user) throws Exception{
         List<User> users = null;
         
         try {
@@ -239,11 +239,11 @@ public class Controller {
         }
     }
     
-    public List<Movie> selectMovies(String criteria) throws Exception {
+    public List<Movie> selectMovies(Movie movie) throws Exception {
         List<Movie> movies = null;
         
         try{
-            movies = movieRepository.select(criteria);
+            movies = movieRepository.select(movie);
         }catch(Exception e){
             e.printStackTrace();
             throw e;
@@ -366,6 +366,19 @@ public class Controller {
         return collection;
     }
     
+    public List<UserMovieCollection> selectCollections(UserMovieCollection col) throws Exception{
+        List<UserMovieCollection> collection = null;
+        
+        try {
+            collection = collectionRepository.select(col);
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        
+        return collection;
+    }
+    
     public void deleteCollection(UserMovieCollection collection) throws Exception{
         ((DbRepository)collectionRepository).connect();
         
@@ -435,5 +448,18 @@ public class Controller {
             ((DbRepository)reviewRepository).rollback();
             throw e;
         }
+    }
+    
+    public List<Review> selectReviews(Review review) throws Exception{
+        List<Review> reviews = null;
+        
+        try {
+            reviews = reviewRepository.select(review);
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        
+        return reviews;
     }
 }

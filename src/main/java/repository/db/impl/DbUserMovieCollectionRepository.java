@@ -76,8 +76,62 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
     }
 
     @Override
-    public List<UserMovieCollection> select(String criteria) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<UserMovieCollection> select(UserMovieCollection umc) throws Exception {
+        try {
+            List<UserMovieCollection> collection = new ArrayList<>();
+            
+            Connection connection = DbConnectionFactory.getInstance().getConnection();
+            String sql = "SELECT * FROM collection c JOIN movie m ON (c.movieID=m.movieID) "
+                    + "JOIN user u ON (u.userID=c.userID) JOIN director d ON (d.directorID=m.directorID) "
+                    + "JOIN movieposter mp ON (mp.movieposterID=m.movieposterID) WHERE c.userID=" + umc.getUser().getUserID();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            
+            while (rs.next()) {
+                UserMovieCollection col = new UserMovieCollection();
+                
+                Movie movie = new Movie();
+                movie.setMovieID(rs.getInt("movieID"));
+                movie.setName(rs.getString("name"));
+                movie.setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
+                movie.setDescription(rs.getString("description"));
+                movie.setScore(Math.floor(rs.getDouble("score")* 100) / 100);
+                
+                Director director = new Director();
+                director.setDirectorID(rs.getInt("directorID"));
+                director.setFirstName(rs.getString("firstname"));
+                director.setLastName(rs.getString("lastname"));
+                director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
+                
+                movie.setDirector(director);
+                
+                MoviePoster moviePoster = new MoviePoster();
+                moviePoster.setMoviePosterID(rs.getInt("movieposterID"));
+                moviePoster.setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
+                
+                movie.setMoviePoster(moviePoster);
+                
+                User user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setAdmin(rs.getBoolean("admin"));
+                
+                col.setMovie(movie);
+                col.setUser(user);
+                
+                loadAssociationClasses(col.getMovie());
+                collection.add(col);
+            }
+            
+            statement.close();
+            rs.close();
+            
+            return collection;
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error loading movie collection!");
+        }
     }
 
     @Override
@@ -114,6 +168,8 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 moviePoster.setMoviePosterID(rs.getInt("movieposterID"));
                 moviePoster.setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
                 
+                movie.setMoviePoster(moviePoster);
+                
                 User user = new User();
                 user.setUserID(rs.getInt("userID"));
                 user.setUsername(rs.getString("username"));
@@ -121,7 +177,7 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 user.setAdmin(rs.getBoolean("admin"));
                 
                 col.setMovie(movie);
-                col.setMovie(movie);
+                col.setUser(user);
                 
                 loadAssociationClasses(col.getMovie());
                 collection.add(col);

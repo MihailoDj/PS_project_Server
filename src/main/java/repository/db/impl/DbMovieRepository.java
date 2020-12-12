@@ -262,23 +262,23 @@ public class DbMovieRepository implements DbRepository<Movie>{
     }
 
     @Override
-    public List<Movie> select(String criteria) throws Exception {
+    public List<Movie> select(Movie movie) throws Exception {
         try {
             List<Movie> movies = new ArrayList<>();
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             String sql = "SELECT * FROM movie m JOIN director d ON (m.directorID = d.directorID)"
                     + "JOIN movieposter mp ON (m.movieposterID = mp.movieposterID) "
-                    + "WHERE name like \"%" + criteria + "%\" OR firstname like \"%" + criteria + "%\" OR "
-                    + "lastname like \"%" + criteria + "%\"";
+                    + "WHERE name like \"%" + movie.getName() + "%\" OR firstname like \"%" + movie.getDirector().getFirstName() + "%\" OR "
+                    + "lastname like \"%" + movie.getDirector().getLastName() + "%\"";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             
             while(rs.next()) {
-                Movie movie = loadMovie(rs);
+                Movie m = loadMovie(rs);
                 
-                loadAssociationClasses(movie);
+                loadAssociationClasses(m);
                 
-                movies.add(movie);
+                movies.add(m);
             }
             
             return movies;

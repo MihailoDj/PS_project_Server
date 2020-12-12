@@ -44,7 +44,7 @@ public class DbProductionCompanyRepository implements DbRepository<ProductionCom
     }
 
     @Override
-    public List<ProductionCompany> select(String obj) throws Exception {
+    public List<ProductionCompany> select(ProductionCompany obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

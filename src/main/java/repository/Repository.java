@@ -17,6 +17,6 @@ public interface Repository<T> {
     public void delete(T obj) throws Exception;
     public void deleteAll() throws Exception;
     public void update(T obj) throws Exception;
-    public List<T> select(String criteria) throws Exception;
+    public List<T> select(T obj) throws Exception;
     public List<T> selectAll() throws Exception;
 }

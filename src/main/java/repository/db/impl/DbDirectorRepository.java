@@ -109,7 +109,7 @@ public class DbDirectorRepository implements DbRepository<Director>{
     }
 
     @Override
-    public List<Director> select(String criteria) throws Exception {
+    public List<Director> select(Director obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

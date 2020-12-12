@@ -21,15 +21,15 @@ import repository.db.DbRepository;
  *
  * @author Mihailo
  */
-public class DbGenreRepository implements DbRepository{
+public class DbGenreRepository implements DbRepository<Genre>{
 
     @Override
-    public void insert(Object obj) throws Exception {
+    public void insert(Genre obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Object obj) throws Exception {
+    public void delete(Genre obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -39,15 +39,9 @@ public class DbGenreRepository implements DbRepository{
     }
 
     @Override
-    public void update(Object obj) throws Exception {
+    public void update(Genre obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public List<Genre> select(String obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     @Override
     public List<Genre> selectAll() throws Exception {
         try{
@@ -71,6 +65,11 @@ public class DbGenreRepository implements DbRepository{
             Logger.getLogger(DbGenreRepository.class.getName()).log(Level.SEVERE, null, ex);
             throw new Exception("Error loading genres!");
         }
+    }
+
+    @Override
+    public List<Genre> select(Genre obj) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

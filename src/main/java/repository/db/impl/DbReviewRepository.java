@@ -132,8 +132,64 @@ public class DbReviewRepository implements DbRepository<Review>{
     }
 
     @Override
-    public List<Review> select(String criteria) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Review> select(Review r) throws Exception {
+        try {
+            List<Review> reviews = new ArrayList<>();
+            Connection connection = DbConnectionFactory.getInstance().getConnection();
+            String sql = "SELECT * FROM review r JOIN movie m ON (m.movieID=r.movieID) "
+                    + "JOIN director d ON (m.directorID = d.directorID) "
+                    + "JOIN movieposter mp ON (m.movieposterID = mp.movieposterID) "
+                    + "JOIN user u ON (u.userID=r.userID) WHERE r.userID=" + r.getUser().getUserID();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            
+            while(rs.next()) {
+                Review review = new Review();
+                review.setReviewID(rs.getInt("reviewID"));
+                review.setReviewText(rs.getString("reviewtext"));
+                review.setReviewScore(rs.getInt("reviewscore"));
+                review.setReviewDate(rs.getTimestamp("reviewdate").toLocalDateTime());
+                
+                Movie movie = new Movie();
+                movie.setMovieID(rs.getInt("movieID"));
+                movie.setName(rs.getString("name"));
+                movie.setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
+                movie.setScore(Math.floor(rs.getDouble("score")* 100) / 100);
+                movie.setDescription(rs.getString("description"));
+                
+                Director director = new Director();
+                director.setDirectorID(rs.getInt("directorID"));
+                director.setFirstName(rs.getString("firstname"));
+                director.setLastName(rs.getString("lastname"));
+                director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
+                
+                MoviePoster moviePoster = new MoviePoster();
+                moviePoster.setMoviePosterID(rs.getInt("movieposterID"));
+                moviePoster.setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
+                
+                movie.setDirector(director);
+                movie.setMoviePoster(moviePoster);
+                
+                User user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setAdmin(rs.getBoolean("admin"));
+                
+                review.setMovie(movie);
+                review.setUser(user);
+                
+                loadAssociationClasses(review.getMovie());
+                reviews.add(review);
+            }
+        
+            statement.close();
+            rs.close();
+            return reviews;
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override
@@ -143,7 +199,8 @@ public class DbReviewRepository implements DbRepository<Review>{
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             String sql = "SELECT * FROM review r JOIN movie m ON (m.movieID=r.movieID) "
                     + "JOIN director d ON (m.directorID = d.directorID) "
-                    + "JOIN movieposter mp ON (m.movieposterID = mp.movieposterID)";
+                    + "JOIN movieposter mp ON (m.movieposterID = mp.movieposterID) "
+                    + "JOIN user u ON (u.userID=r.userID)";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             

@@ -64,9 +64,14 @@ public class Server {
                         User userDelete = (User)request.getArgument();
                         Controller.getInstance().deleteUser(userDelete);
                         break;
-                        
-                        // TODO select_movies
-                        
+                    case SELECT_USER: 
+                        User userSelect = (User)request.getArgument();
+                        response.setResult(Controller.getInstance().selectUser(userSelect));
+                        break;
+                    case SELECT_MOVIES:
+                        Movie movieSelect = (Movie)request.getArgument();
+                        response.setResult(Controller.getInstance().selectMovies(movieSelect));
+                        break;
                     case SELECT_ALL_MOVIES:
                         response.setResult(Controller.getInstance().selectAllMovies());
                         break;
@@ -116,6 +121,10 @@ public class Server {
                     case SELECT_ALL_COLLECTIONS:
                         response.setResult(Controller.getInstance().selectAllCollections());
                         break;
+                    case SELECT_COLLECTIONS:
+                        UserMovieCollection collectionSelect = (UserMovieCollection)request.getArgument();
+                        response.setResult(Controller.getInstance().selectCollections(collectionSelect));
+                        break;
                     case INSERT_COLLECTION:
                         UserMovieCollection collectionInsert = (UserMovieCollection)request.getArgument();
                         Controller.getInstance().insertCollection(collectionInsert);
@@ -126,6 +135,10 @@ public class Server {
                         break;
                     case SELECT_ALL_REVIEWS:
                         response.setResult(Controller.getInstance().selectAllReviews());
+                        break;
+                    case SELECT_REVIEWS:
+                        Review reviewSelect = (Review)request.getArgument();
+                        response.setResult(Controller.getInstance().selectReviews(reviewSelect));
                         break;
                     case INSERT_REVIEW:
                         Review reviewInsert = (Review)request.getArgument();
