@@ -36,7 +36,7 @@ public class DbActorRepository implements DbRepository<Actor>{
             
             while(rs.next()) {
                 Actor actor = new Actor();
-                actor.setActorID(rs.getInt("actorID"));
+                actor.setActorID(rs.getLong("actorID"));
                 actor.setFirstName(rs.getString("firstname"));
                 actor.setLastName(rs.getString("lastname"));
                 actor.setBiography(rs.getString("biography"));
@@ -88,7 +88,7 @@ public class DbActorRepository implements DbRepository<Actor>{
                     + "WHERE actorID=" + actor.getActorID();
             PreparedStatement statement = connection.prepareStatement(sql);
             
-            statement.setInt(1, actor.getActorID());
+            statement.setLong(1, actor.getActorID());
             statement.setString(2, actor.getFirstName());
             statement.setString(3, actor.getLastName());
             statement.setString(4, actor.getBiography());

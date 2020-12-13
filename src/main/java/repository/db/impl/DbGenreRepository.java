@@ -54,7 +54,7 @@ public class DbGenreRepository implements DbRepository<Genre>{
             
             while (rs.next()) {
                 Genre genre = new Genre();
-                genre.setGenreID(rs.getInt("genreID"));
+                genre.setGenreID(rs.getLong("genreID"));
                 genre.setName(rs.getString("name"));
                 
                 genres.add(genre);

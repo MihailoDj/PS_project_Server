@@ -36,7 +36,7 @@ public class DbUserRepository implements DbRepository<User> {
             
             while (rs.next()) {
                 User user = new User(); 
-                user.setUserID(rs.getInt("userID"));
+                user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setAdmin(rs.getBoolean("admin"));
@@ -62,7 +62,7 @@ public class DbUserRepository implements DbRepository<User> {
             String sql = "INSERT INTO user (userID, username, password, admin) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             
-            statement.setInt(1, user.getUserID());
+            statement.setLong(1, user.getUserID());
             statement.setString(2, user.getUsername());
             statement.setString(3, user.getPassword());
             statement.setBoolean(4, user.isAdmin());
@@ -117,7 +117,7 @@ public class DbUserRepository implements DbRepository<User> {
             
             while (rs.next()) {
                 User u = new User();
-                u.setUserID(rs.getInt("userID"));
+                u.setUserID(rs.getLong("userID"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
                 u.setAdmin(rs.getBoolean("admin"));

@@ -19,8 +19,8 @@ public class UserRepository {
     public UserRepository() {
         users = new ArrayList<User>() {
             {
-                add(new User(1, "admin", "admin", true));
-                add(new User(2, "korisnik", "korisnik", false));
+                add(new User(1l, "admin", "admin", true));
+                add(new User(2l, "korisnik", "korisnik", false));
             }
         };
     }

@@ -60,7 +60,7 @@ public class DbProductionCompanyRepository implements DbRepository<ProductionCom
             
             while (rs.next()) {
                 ProductionCompany productionCompany = new ProductionCompany();
-                productionCompany.setProductionCompanyID(rs.getInt("pcID"));
+                productionCompany.setProductionCompanyID(rs.getLong("pcID"));
                 productionCompany.setName(rs.getString("name"));
                 
                 productionCompanies.add(productionCompany);

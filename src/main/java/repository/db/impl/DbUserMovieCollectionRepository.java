@@ -40,8 +40,8 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
             String sql = "INSERT INTO collection (movieID, userID) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             
-            statement.setInt(1, collection.getMovie().getMovieID());
-            statement.setInt(2, collection.getUser().getUserID());
+            statement.setLong(1, collection.getMovie().getMovieID());
+            statement.setLong(2, collection.getUser().getUserID());
             statement.executeUpdate();
             
             statement.close();
@@ -91,14 +91,14 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 UserMovieCollection col = new UserMovieCollection();
                 
                 Movie movie = new Movie();
-                movie.setMovieID(rs.getInt("movieID"));
+                movie.setMovieID(rs.getLong("movieID"));
                 movie.setName(rs.getString("name"));
                 movie.setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
                 movie.setDescription(rs.getString("description"));
                 movie.setScore(Math.floor(rs.getDouble("score")* 100) / 100);
                 
                 Director director = new Director();
-                director.setDirectorID(rs.getInt("directorID"));
+                director.setDirectorID(rs.getLong("directorID"));
                 director.setFirstName(rs.getString("firstname"));
                 director.setLastName(rs.getString("lastname"));
                 director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
@@ -106,13 +106,13 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 movie.setDirector(director);
                 
                 MoviePoster moviePoster = new MoviePoster();
-                moviePoster.setMoviePosterID(rs.getInt("movieposterID"));
+                moviePoster.setMoviePosterID(rs.getLong("movieposterID"));
                 moviePoster.setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
                 
                 movie.setMoviePoster(moviePoster);
                 
                 User user = new User();
-                user.setUserID(rs.getInt("userID"));
+                user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setAdmin(rs.getBoolean("admin"));
@@ -150,14 +150,14 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 UserMovieCollection col = new UserMovieCollection();
                 
                 Movie movie = new Movie();
-                movie.setMovieID(rs.getInt("movieID"));
+                movie.setMovieID(rs.getLong("movieID"));
                 movie.setName(rs.getString("name"));
                 movie.setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
                 movie.setDescription(rs.getString("description"));
                 movie.setScore(Math.floor(rs.getDouble("score")* 100) / 100);
                 
                 Director director = new Director();
-                director.setDirectorID(rs.getInt("directorID"));
+                director.setDirectorID(rs.getLong("directorID"));
                 director.setFirstName(rs.getString("firstname"));
                 director.setLastName(rs.getString("lastname"));
                 director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
@@ -165,13 +165,13 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 movie.setDirector(director);
                 
                 MoviePoster moviePoster = new MoviePoster();
-                moviePoster.setMoviePosterID(rs.getInt("movieposterID"));
+                moviePoster.setMoviePosterID(rs.getLong("movieposterID"));
                 moviePoster.setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
                 
                 movie.setMoviePoster(moviePoster);
                 
                 User user = new User();
-                user.setUserID(rs.getInt("userID"));
+                user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setAdmin(rs.getBoolean("admin"));
@@ -241,7 +241,7 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
     
     private Role loadRole(ResultSet rs) throws Exception{
         Actor actor = new Actor();
-        actor.setActorID(rs.getInt("actorID"));
+        actor.setActorID(rs.getLong("actorID"));
         actor.setFirstName(rs.getString("firstname"));
         actor.setLastName(rs.getString("lastname"));
         actor.setBiography(rs.getString("biography"));
@@ -255,7 +255,7 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
     
     private MovieGenre loadMovieGenre(ResultSet rs) throws Exception{
         Genre genre = new Genre();
-        genre.setGenreID(rs.getInt("ggenreID"));
+        genre.setGenreID(rs.getLong("ggenreID"));
         genre.setName(rs.getString("gname"));
         
         MovieGenre movieGenre = new MovieGenre();
@@ -265,7 +265,7 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
     
     private Production loadProduction(ResultSet rs) throws Exception{
         ProductionCompany pc=  new ProductionCompany();
-        pc.setProductionCompanyID(rs.getInt("pcID"));
+        pc.setProductionCompanyID(rs.getLong("pcID"));
         pc.setName(rs.getString("pcname"));
         
         Production production = new Production();

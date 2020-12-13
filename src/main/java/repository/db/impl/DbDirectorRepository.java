@@ -38,7 +38,7 @@ public class DbDirectorRepository implements DbRepository<Director>{
             
             while(rs.next()) {
                 Director director = new Director();
-                director.setDirectorID(rs.getInt("directorID"));
+                director.setDirectorID(rs.getLong("directorID"));
                 director.setFirstName(rs.getString("firstname"));
                 director.setLastName(rs.getString("lastname"));
                 director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
@@ -90,7 +90,7 @@ public class DbDirectorRepository implements DbRepository<Director>{
                     + "WHERE directorID=" + director.getDirectorID();
             PreparedStatement statement = connection.prepareStatement(sql);
             
-            statement.setInt(1, director.getDirectorID());
+            statement.setLong(1, director.getDirectorID());
             statement.setString(2, director.getFirstName());
             statement.setString(3, director.getLastName());
             statement.setObject(4, director.getDateOfBirth(), java.sql.Types.DATE);

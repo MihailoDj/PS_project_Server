@@ -76,7 +76,7 @@ public class DbMovieRepository implements DbRepository<Movie>{
             String sql = "INSERT INTO movieposter (movieposterID, posterimage) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
-            statement.setInt(1, movie.getMoviePoster().getMoviePosterID());
+            statement.setLong(1, movie.getMoviePoster().getMoviePosterID());
             
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(movie.getMoviePoster().getPosterImage(), "jpg", baos);
@@ -90,7 +90,7 @@ public class DbMovieRepository implements DbRepository<Movie>{
             ResultSet rsKey = statement.getGeneratedKeys();
             
             if (rsKey.next()) {
-                int movieposterID = rsKey.getInt(1);
+                Long movieposterID = rsKey.getLong(1);
                 movie.getMoviePoster().setMoviePosterID(movieposterID);
             }
             //////////////////////////////////////////
@@ -100,27 +100,27 @@ public class DbMovieRepository implements DbRepository<Movie>{
                     + "VALUES(?, ?, ?, ?, ?, ?, ?)";
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
-            statement.setInt(1, movie.getMovieID());
+            statement.setLong(1, movie.getMovieID());
             statement.setString(2, movie.getName());
             statement.setObject(3, movie.getReleaseDate(), java.sql.Types.DATE);
             statement.setDouble(4, movie.getScore());
             statement.setString(5, movie.getDescription());
-            statement.setInt(6, movie.getDirector().getDirectorID());
-            statement.setInt(7, movie.getMoviePoster().getMoviePosterID());
+            statement.setLong(6, movie.getDirector().getDirectorID());
+            statement.setLong(7, movie.getMoviePoster().getMoviePosterID());
             
             statement.executeUpdate();
             rsKey = statement.getGeneratedKeys();
             
             if (rsKey.next()) {
-                int id = rsKey.getInt(1);
+                Long id = rsKey.getLong(1);
                 movie.setMovieID(id);
                 
                 //INSERT ROLES
                 sql = "INSERT INTO role (actorID, movieID, rolename) VALUES (?, ?, ?)";
                 statement = connection.prepareStatement(sql);
                 for (Role role : movie.getRoles()) {
-                    statement.setInt(1, role.getActor().getActorID());
-                    statement.setInt(2, movie.getMovieID());
+                    statement.setLong(1, role.getActor().getActorID());
+                    statement.setLong(2, movie.getMovieID());
                     statement.setString(3, role.getRoleName());
                     statement.executeUpdate();
                 }
@@ -129,8 +129,8 @@ public class DbMovieRepository implements DbRepository<Movie>{
                 sql = "INSERT INTO movie_genre (genreID, movieID) VALUES (?, ?)";
                 statement = connection.prepareStatement(sql);
                 for (MovieGenre movieGenre : movie.getMovieGenres()) {
-                    statement.setInt(1, movieGenre.getGenre().getGenreID());
-                    statement.setInt(2, movie.getMovieID());
+                    statement.setLong(1, movieGenre.getGenre().getGenreID());
+                    statement.setLong(2, movie.getMovieID());
                     statement.executeUpdate();
                 }
                 
@@ -138,8 +138,8 @@ public class DbMovieRepository implements DbRepository<Movie>{
                 sql = "INSERT INTO production (productioncompanyID, movieID) VALUES (?, ?)";
                 statement = connection.prepareStatement(sql);
                 for (Production production : movie.getProductions()) {
-                    statement.setInt(1, production.getProductionCompany().getProductionCompanyID());
-                    statement.setInt(2, movie.getMovieID());
+                    statement.setLong(1, production.getProductionCompany().getProductionCompanyID());
+                    statement.setLong(2, movie.getMovieID());
                     statement.executeUpdate();
                 }
                 
@@ -178,7 +178,7 @@ public class DbMovieRepository implements DbRepository<Movie>{
             //INSERT NEW POSTER
             String sql = "INSERT INTO movieposter (movieposterID, posterimage) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, movie.getMoviePoster().getMoviePosterID());
+            statement.setLong(1, movie.getMoviePoster().getMoviePosterID());
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(movie.getMoviePoster().getPosterImage(), "jpg", baos);
             InputStream imageStream = new ByteArrayInputStream(baos.toByteArray());
@@ -198,12 +198,12 @@ public class DbMovieRepository implements DbRepository<Movie>{
                     + " movieposterID=? WHERE movieID=" + movie.getMovieID();
             statement = connection.prepareStatement(sql);
             
-            statement.setInt(1, movie.getMovieID());
+            statement.setLong(1, movie.getMovieID());
             statement.setString(2, movie.getName());
             statement.setObject(3, movie.getReleaseDate(), java.sql.Types.DATE);
             statement.setDouble(4, movie.getScore());
             statement.setString(5, movie.getDescription());
-            statement.setInt(6, movie.getDirector().getDirectorID());
+            statement.setLong(6, movie.getDirector().getDirectorID());
             statement.setInt(7, movieposterID);
             
             statement.executeUpdate();
@@ -222,8 +222,8 @@ public class DbMovieRepository implements DbRepository<Movie>{
             sql = "INSERT INTO role (actorID, movieID, rolename) VALUES (?, ?, ?)";
             statement = connection.prepareStatement(sql);
             for (Role role : movie.getRoles()) {
-                statement.setInt(1, role.getActor().getActorID());
-                statement.setInt(2, movie.getMovieID());
+                statement.setLong(1, role.getActor().getActorID());
+                statement.setLong(2, movie.getMovieID());
                 statement.setString(3, role.getRoleName());
                 statement.executeUpdate();
             }
@@ -237,8 +237,8 @@ public class DbMovieRepository implements DbRepository<Movie>{
             sql = "INSERT INTO movie_genre (genreID, movieID) VALUES (?, ?)";
             statement = connection.prepareStatement(sql);
             for (MovieGenre movieGenre : movie.getMovieGenres()) {
-                statement.setInt(1, movieGenre.getGenre().getGenreID());
-                statement.setInt(2, movie.getMovieID());
+                statement.setLong(1, movieGenre.getGenre().getGenreID());
+                statement.setLong(2, movie.getMovieID());
                 statement.executeUpdate();
             }
             
@@ -251,8 +251,8 @@ public class DbMovieRepository implements DbRepository<Movie>{
             sql = "INSERT INTO production (productioncompanyID, movieID) VALUES (?, ?)";
             statement = connection.prepareStatement(sql);
             for (Production production : movie.getProductions()) {
-                statement.setInt(1, production.getProductionCompany().getProductionCompanyID());
-                statement.setInt(2, movie.getMovieID());
+                statement.setLong(1, production.getProductionCompany().getProductionCompanyID());
+                statement.setLong(2, movie.getMovieID());
                 statement.executeUpdate();
             }
         
@@ -294,17 +294,17 @@ public class DbMovieRepository implements DbRepository<Movie>{
     
     private Movie loadMovie(ResultSet rs) throws Exception{
         Director director = new Director();
-        director.setDirectorID(rs.getInt("directorID"));
+        director.setDirectorID(rs.getLong("directorID"));
         director.setFirstName(rs.getString("firstname"));
         director.setLastName(rs.getString("lastname"));
         director.setDateOfBirth(rs.getObject("dateofbirth", LocalDate.class));
         
         MoviePoster moviePoster = new MoviePoster();
-        moviePoster.setMoviePosterID(rs.getInt("movieposterID"));
+        moviePoster.setMoviePosterID(rs.getLong("movieposterID"));
         moviePoster.setPosterImage(ImageIO.read(rs.getBlob("posterimage").getBinaryStream()));
         
         Movie movie = new Movie();
-        movie.setMovieID(rs.getInt("movieID"));
+        movie.setMovieID(rs.getLong("movieID"));
         movie.setName(rs.getString("name"));
         movie.setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
         movie.setDescription(rs.getString("description"));
@@ -317,7 +317,7 @@ public class DbMovieRepository implements DbRepository<Movie>{
     
     private Role loadRole(ResultSet rs) throws Exception{
         Actor actor = new Actor();
-        actor.setActorID(rs.getInt("actorID"));
+        actor.setActorID(rs.getLong("actorID"));
         actor.setFirstName(rs.getString("firstname"));
         actor.setLastName(rs.getString("lastname"));
         actor.setBiography(rs.getString("biography"));
@@ -331,7 +331,7 @@ public class DbMovieRepository implements DbRepository<Movie>{
     
     private MovieGenre loadMovieGenre(ResultSet rs) throws Exception{
         Genre genre = new Genre();
-        genre.setGenreID(rs.getInt("ggenreID"));
+        genre.setGenreID(rs.getLong("ggenreID"));
         genre.setName(rs.getString("gname"));
         
         MovieGenre movieGenre = new MovieGenre();
@@ -342,7 +342,7 @@ public class DbMovieRepository implements DbRepository<Movie>{
     
     private Production loadProduction(ResultSet rs) throws Exception{
         ProductionCompany pc = new ProductionCompany();
-        pc.setProductionCompanyID(rs.getInt("pcID"));
+        pc.setProductionCompanyID(rs.getLong("pcID"));
         pc.setName(rs.getString("pcname"));
         
         Production production = new Production();
