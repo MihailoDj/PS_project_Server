@@ -14,6 +14,7 @@ import domain.Genre;
 import domain.ProductionCompany;
 import domain.Review;
 import domain.UserMovieCollection;
+import domain.UserStatistics;
 import repository.Repository;
 import repository.db.DbRepository;
 import repository.db.impl.DbActorRepository;
@@ -461,5 +462,18 @@ public class Controller {
         }
         
         return reviews;
+    }
+    
+    public List<UserStatistics> selectUserStatistics() throws Exception{
+        List<UserStatistics> userStats = null;
+        
+        try {
+            userStats = ((DbUserRepository)userRepository).selectUserStatistics();
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        
+        return userStats;
     }
 }

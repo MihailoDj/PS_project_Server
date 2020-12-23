@@ -16,6 +16,7 @@ import domain.Movie;
 import domain.Review;
 import domain.User;
 import domain.UserMovieCollection;
+import domain.UserStatistics;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -67,6 +68,9 @@ public class Server {
                     case SELECT_USER: 
                         User userSelect = (User)request.getArgument();
                         response.setResult(Controller.getInstance().selectUser(userSelect));
+                        break;
+                    case SELECT_USER_STATISTICS:
+                        response.setResult(Controller.getInstance().selectUserStatistics());
                         break;
                     case SELECT_MOVIES:
                         Movie movieSelect = (Movie)request.getArgument();

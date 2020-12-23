@@ -6,6 +6,7 @@
 package repository.db.impl;
 
 import domain.User;
+import domain.UserStatistics;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -132,4 +133,45 @@ public class DbUserRepository implements DbRepository<User> {
         }
     }
     
+    public List<UserStatistics> selectUserStatistics() throws Exception{
+        try {
+            Connection connection = DbConnectionFactory.getInstance().getConnection();
+            List<UserStatistics> userStats = new ArrayList<>();
+            
+            String sql = "SELECT u.userID, u.username, u.admin, " +
+                        "(SELECT COUNT(*) FROM collection c WHERE c.userID = u.userID) AS collection_size," +
+                        "(SELECT COUNT(*) FROM review r WHERE r.userID = u.userID) AS review_count," +
+                        "(SELECT MAX(reviewscore) AS highest_rated_movie FROM review r INNER JOIN movie m ON r.movieID=m.movieID WHERE r.userID=u.userID) AS score," +
+                        "(SELECT m.name FROM movie m JOIN review r ON m.movieID=r.movieID WHERE r.userID=u.userID HAVING MAX(r.reviewscore)) AS highest_rated_movie" +
+                        " FROM USER u";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            
+            while (rs.next()) {
+                UserStatistics stats = new UserStatistics(); 
+                
+                User user = new User();
+                user.setUserID(rs.getLong("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setAdmin(rs.getBoolean("admin"));
+                stats.setUser(user);
+                
+                stats.setHighestRatedMovie(rs.getString("highest_rated_movie"));
+                stats.setScore(rs.getDouble("score"));
+                stats.setCollectionSize(rs.getInt("collection_size"));
+                stats.setReviewCount(rs.getInt("review_count"));
+                    
+                userStats.add(stats);
+            }
+            
+            rs.close();
+            statement.close();
+            
+            return userStats;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(DbUserRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception("Unable to fetch data");
+        }
+    }
 }
