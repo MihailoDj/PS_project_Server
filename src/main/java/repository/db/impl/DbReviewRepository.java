@@ -136,10 +136,19 @@ public class DbReviewRepository implements DbRepository<Review>{
         try {
             List<Review> reviews = new ArrayList<>();
             Connection connection = DbConnectionFactory.getInstance().getConnection();
-            String sql = "SELECT * FROM review r JOIN movie m ON (m.movieID=r.movieID) "
+            String sql;
+            
+            if(r.getUser().getUserID() != 0l)
+                    sql = "SELECT * FROM review r JOIN movie m ON (m.movieID=r.movieID) "
                     + "JOIN director d ON (m.directorID = d.directorID) "
                     + "JOIN movieposter mp ON (m.movieposterID = mp.movieposterID) "
                     + "JOIN user u ON (u.userID=r.userID) WHERE r.userID=" + r.getUser().getUserID();
+            else
+                sql = "SELECT * FROM review r JOIN movie m ON (m.movieID=r.movieID) "
+                    + "JOIN director d ON (m.directorID = d.directorID) "
+                    + "JOIN movieposter mp ON (m.movieposterID = mp.movieposterID) "
+                    + "JOIN user u ON (u.userID=r.userID) WHERE r.movieID=" + r.getMovie().getMovieID();
+                
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             
