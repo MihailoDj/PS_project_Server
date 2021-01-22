@@ -15,6 +15,7 @@ import domain.ProductionCompany;
 import domain.Review;
 import domain.UserMovieCollection;
 import domain.UserStatistics;
+import java.util.ArrayList;
 import repository.Repository;
 import repository.db.DbRepository;
 import repository.db.impl.DbActorRepository;
@@ -25,6 +26,8 @@ import repository.db.impl.DbProductionCompanyRepository;
 import repository.db.impl.DbReviewRepository;
 import repository.db.impl.DbUserMovieCollectionRepository;
 import repository.db.impl.DbUserRepository;
+import server.Server;
+import thread.ClientRequestHandler;
 
 /**
  *
@@ -40,6 +43,9 @@ public class Controller {
     private final Repository collectionRepository;
     private final Repository reviewRepository;
     
+    private List<ClientRequestHandler> clients;
+    private Server server;
+    
     private static Controller controller;
 
     private Controller() {
@@ -51,6 +57,8 @@ public class Controller {
         productionCompanyRepository = new DbProductionCompanyRepository();
         collectionRepository = new DbUserMovieCollectionRepository();
         reviewRepository = new DbReviewRepository();
+        
+        clients = new ArrayList<>();
     }
     
     public static Controller getInstance() {
@@ -64,16 +72,12 @@ public class Controller {
         List<User> users = userRepository.selectAll();
         
         for (User user : users) {
-            if(user.getUsername().equals(username)){
-                if (user.getPassword().equals(password)) {
-                    return user;
-                } else {
-                    throw new Exception("Incorrect password!");
-                }
+            if(user.getUsername().equals(username)&& user.getPassword().equals(password)){
+                return user;
             }
         }
         
-        throw new Exception("User doesn't exist.");
+        return null;
     }
     
     public List<User> selectUser(User user) throws Exception{
@@ -475,5 +479,22 @@ public class Controller {
         }
         
         return userStats;
+    }
+
+    public List<ClientRequestHandler> getClients() {
+        return clients;
+    }
+    
+    public void addClient(ClientRequestHandler client) {
+        clients.add(client);
+    }
+    
+    public void startServer() {
+        server = new Server();
+        server.start();
+    }
+    
+    public void stopServer() {
+        server.stopServer();
     }
 }

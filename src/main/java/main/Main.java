@@ -5,7 +5,9 @@
  */
 package main;
 
-import server.Server;
+import view.coordinator.ServerFormCoordinator;
+
+
 
 /**
  *
@@ -13,6 +15,6 @@ import server.Server;
  */
 public class Main {
     public static void main(String[] args) {
-        new Server().startServer();
+        ServerFormCoordinator.getInstance().openMainForm();
     }
 }
