@@ -495,6 +495,13 @@ public class Controller {
     }
     
     public void stopServer() {
+        for (ClientRequestHandler crh : clients) {
+            crh.logoutAll();
+        }
         server.stopServer();
+    }
+
+    public void removeClient(ClientRequestHandler client) {
+        clients.remove(client);
     }
 }

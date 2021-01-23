@@ -5,6 +5,7 @@
  */
 package thread;
 
+import comm.Operation;
 import comm.Request;
 import comm.Response;
 import controller.Controller;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
  */
 public class ClientRequestHandler extends Thread{
     private Socket socket;
+    private boolean stop = false;
     private User user;
 
     public ClientRequestHandler(Socket socket) {
@@ -33,9 +35,7 @@ public class ClientRequestHandler extends Thread{
 
     @Override
     public void run(){
-        try {
-            
-            while(true) {
+        while(!stop) {
                 Request request = receiveUserRequest();
                 Response response = new Response();
                 response.setOperation(request.getOperation());
@@ -53,6 +53,7 @@ public class ClientRequestHandler extends Thread{
                             } else {
                                 response.setResult(null);
                             }
+                            sendServerResponse(socket, response);
                             break;
                         case INSERT_USER:
                             User userInsert = (User)request.getArgument();
@@ -66,23 +67,23 @@ public class ClientRequestHandler extends Thread{
                             User userDelete = (User)request.getArgument();
                             Controller.getInstance().deleteUser(userDelete);
                             break;
-                        case SELECT_USER: 
-                            User userSelect = (User)request.getArgument();
-                            response.setResult(Controller.getInstance().selectUser(userSelect));
-                            break;
                         case SELECT_MOVIES:
                             Movie movieSelect = (Movie)request.getArgument();
                             response.setResult(Controller.getInstance().selectMovies(movieSelect));
+                            sendServerResponse(socket, response);
                             break;
                         case SELECT_ALL_MOVIES:
                             response.setResult(Controller.getInstance().selectAllMovies());
+                            sendServerResponse(socket, response);
                             break;
                         case SELECT_ALL_COLLECTIONS:
                             response.setResult(Controller.getInstance().selectAllCollections());
+                            sendServerResponse(socket, response);
                             break;
                         case SELECT_COLLECTIONS:
                             UserMovieCollection collectionSelect = (UserMovieCollection)request.getArgument();
                             response.setResult(Controller.getInstance().selectCollections(collectionSelect));
+                            sendServerResponse(socket, response);
                             break;
                         case INSERT_COLLECTION:
                             UserMovieCollection collectionInsert = (UserMovieCollection)request.getArgument();
@@ -94,10 +95,12 @@ public class ClientRequestHandler extends Thread{
                             break;
                         case SELECT_ALL_REVIEWS:
                             response.setResult(Controller.getInstance().selectAllReviews());
+                            sendServerResponse(socket, response);
                             break;
                         case SELECT_REVIEWS:
                             Review reviewSelect = (Review)request.getArgument();
                             response.setResult(Controller.getInstance().selectReviews(reviewSelect));
+                            sendServerResponse(socket, response);
                             break;
                         case INSERT_REVIEW:
                             Review reviewInsert = (Review)request.getArgument();
@@ -116,12 +119,7 @@ public class ClientRequestHandler extends Thread{
                     ex.printStackTrace();
                     response.setException(ex);
                 }
-                sendServerResponse(socket, response);
             }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public User getUser() {
@@ -155,5 +153,12 @@ public class ClientRequestHandler extends Thread{
         }
     }
     
-    
+    public Response logoutAll() {
+        stop = true;
+        
+        Response response = new Response();
+        response.setOperation(Operation.LOGOUT_ALL);
+        sendServerResponse(socket, response);
+        return response;
+    }
 }
