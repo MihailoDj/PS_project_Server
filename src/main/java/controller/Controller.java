@@ -16,6 +16,8 @@ import domain.Review;
 import domain.UserMovieCollection;
 import domain.UserStatistics;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import repository.Repository;
 import repository.db.DbRepository;
 import repository.db.impl.DbActorRepository;
@@ -28,6 +30,7 @@ import repository.db.impl.DbUserMovieCollectionRepository;
 import repository.db.impl.DbUserRepository;
 import server.Server;
 import thread.ClientRequestHandler;
+import view.coordinator.ServerFormCoordinator;
 
 /**
  *
@@ -73,6 +76,7 @@ public class Controller {
         
         for (User user : users) {
             if(user.getUsername().equals(username)&& user.getPassword().equals(password)){
+                user.setStatus("online");
                 return user;
             }
         }
@@ -496,8 +500,16 @@ public class Controller {
     
     public void stopServer() {
         for (ClientRequestHandler crh : clients) {
-            crh.logoutAll();
+            try {
+                crh.getUser().setStatus("offline");
+                updateUser(crh.getUser());
+                crh.logoutAll();
+            } catch (Exception ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        
+        ServerFormCoordinator.getInstance().getMainContoller().setUpTableuserStatistics();
         server.stopServer();
     }
 

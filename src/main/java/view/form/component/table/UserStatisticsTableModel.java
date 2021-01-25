@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
 public class UserStatisticsTableModel extends AbstractTableModel{
 
     private List<UserStatistics> userStats;
-    private final String[] columnNames = new String[]{"ID", "Username", "System role", "Collection size",
+    private final String[] columnNames = new String[]{"ID", "Username", "Status", "Collection size",
         "Reviews posted", "Highest rated movie", "Score"};
     
     public UserStatisticsTableModel(List<UserStatistics> userStats) {
@@ -40,9 +40,7 @@ public class UserStatisticsTableModel extends AbstractTableModel{
         switch(columnIndex) {
             case 0: return stats.getUser().getUserID();
             case 1: return stats.getUser().getUsername();
-            case 2: 
-                if (stats.getUser().isAdmin()) return "Admin";
-                else return "User";
+            case 2: return stats.getUser().getStatus();
             case 3: return stats.getCollectionSize();
             case 4: return stats.getReviewCount();
             case 5: return stats.getHighestRatedMovie();
@@ -56,6 +54,10 @@ public class UserStatisticsTableModel extends AbstractTableModel{
     @Override
     public String getColumnName(int column) {
         return columnNames[column];
+    }
+    
+    public String getStatus (int row) {
+        return userStats.get(row).getUser().getStatus();
     }
     
     

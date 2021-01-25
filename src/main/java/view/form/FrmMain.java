@@ -5,10 +5,15 @@
  */
 package view.form;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -21,6 +26,7 @@ public class FrmMain extends javax.swing.JFrame {
      */
     public FrmMain() {
         initComponents();
+        initPanel();
     }
 
     /**
@@ -35,8 +41,10 @@ public class FrmMain extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUserStatistics = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        btnStartServer = new javax.swing.JButton();
+        jPanelServerControls = new javax.swing.JPanel();
         btnStopServer = new javax.swing.JButton();
+        btnStartServer = new javax.swing.JButton();
+        lblServerStatus = new javax.swing.JLabel();
         jMenuBarMain = new javax.swing.JMenuBar();
         jmMovie = new javax.swing.JMenu();
         jmiNewMovie = new javax.swing.JMenuItem();
@@ -64,10 +72,44 @@ public class FrmMain extends javax.swing.JFrame {
 
         jLabel1.setText("User statistics:");
 
-        btnStartServer.setText("Start server");
+        jPanelServerControls.setName("Server controls"); // NOI18N
 
         btnStopServer.setText("Stop server");
         btnStopServer.setEnabled(false);
+
+        btnStartServer.setText("Start server");
+
+        lblServerStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblServerStatus.setForeground(new java.awt.Color(255, 0, 0));
+        lblServerStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblServerStatus.setText("SERVER IS CLOSED");
+
+        javax.swing.GroupLayout jPanelServerControlsLayout = new javax.swing.GroupLayout(jPanelServerControls);
+        jPanelServerControls.setLayout(jPanelServerControlsLayout);
+        jPanelServerControlsLayout.setHorizontalGroup(
+            jPanelServerControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelServerControlsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelServerControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelServerControlsLayout.createSequentialGroup()
+                        .addComponent(btnStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(72, 72, 72)
+                        .addComponent(btnStopServer, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(lblServerStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanelServerControlsLayout.setVerticalGroup(
+            jPanelServerControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelServerControlsLayout.createSequentialGroup()
+                .addGap(9, 9, 9)
+                .addComponent(lblServerStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelServerControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnStopServer, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         jmMovie.setText("Movie");
 
@@ -118,25 +160,20 @@ public class FrmMain extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 844, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(72, 72, 72)
-                                .addComponent(btnStopServer, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanelServerControls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStopServer, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jPanelServerControls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -149,6 +186,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenuAbout;
     private javax.swing.JMenuBar jMenuBarMain;
+    private javax.swing.JPanel jPanelServerControls;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu jmActor;
     private javax.swing.JMenu jmDirector;
@@ -160,6 +198,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiViewAllActors;
     private javax.swing.JMenuItem jmiViewAllDirectors;
     private javax.swing.JMenuItem jmiViewAllMovies;
+    private javax.swing.JLabel lblServerStatus;
     private javax.swing.JTable tblUserStatistics;
     // End of variables declaration//GEN-END:variables
 
@@ -198,6 +237,10 @@ public class FrmMain extends javax.swing.JFrame {
     public JButton getBtnStopServer() {
         return btnStopServer;
     }
+
+    public JLabel getLblServerStatus() {
+        return lblServerStatus;
+    }
     
     public void btnStartServerActionListener(ActionListener actionListener) {
         btnStartServer.addActionListener(actionListener);
@@ -206,5 +249,12 @@ public class FrmMain extends javax.swing.JFrame {
         btnStopServer.addActionListener(actionListener);
     }
     
-    
+    public void frmMainWindowListener(WindowListener windowListener) {
+        this.addWindowListener(windowListener);
+    }
+
+    private void initPanel() {
+        Border border = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Server controls");
+        jPanelServerControls.setBorder(border);
+    }
 }

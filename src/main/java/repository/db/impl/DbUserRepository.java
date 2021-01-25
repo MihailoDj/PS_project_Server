@@ -40,7 +40,7 @@ public class DbUserRepository implements DbRepository<User> {
                 user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setAdmin(rs.getBoolean("admin"));
+                user.setStatus(rs.getString("status"));
                     
                 users.add(user);
             }
@@ -60,13 +60,13 @@ public class DbUserRepository implements DbRepository<User> {
     public void insert(User user) throws Exception {
         try {
             Connection connection = DbConnectionFactory.getInstance().getConnection();
-            String sql = "INSERT INTO user (userID, username, password, admin) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO user (userID, username, password, status) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             
             statement.setLong(1, user.getUserID());
             statement.setString(2, user.getUsername());
             statement.setString(3, user.getPassword());
-            statement.setBoolean(4, user.isAdmin());
+            statement.setString(4, user.getStatus());
             statement.executeUpdate();
             
             statement.close();
@@ -93,11 +93,14 @@ public class DbUserRepository implements DbRepository<User> {
     public void update(User user) throws Exception {
         try {
             Connection connection = DbConnectionFactory.getInstance().getConnection();
-            String sql = "UPDATE user SET username=?, password=? WHERE userID=" + user.getUserID();
+            String sql = "UPDATE user SET username=?, password=?, status=? WHERE userID=" + user.getUserID();
             PreparedStatement statement = connection.prepareStatement(sql);
             
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
+            statement.setString(3, user.getStatus());
+            
+            
             statement.executeUpdate();
             
             statement.close();
@@ -121,7 +124,7 @@ public class DbUserRepository implements DbRepository<User> {
                 u.setUserID(rs.getLong("userID"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
-                u.setAdmin(rs.getBoolean("admin"));
+                u.setStatus(rs.getString("status"));
                         
                 users.add(u);
             }
@@ -138,7 +141,7 @@ public class DbUserRepository implements DbRepository<User> {
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             List<UserStatistics> userStats = new ArrayList<>();
             
-            String sql = "SELECT u.userID, u.username, u.admin, " +
+            String sql = "SELECT u.userID, u.username, u.status, " +
                         "(SELECT COUNT(*) FROM collection c WHERE c.userID = u.userID) AS collection_size," +
                         "(SELECT COUNT(*) FROM review r WHERE r.userID = u.userID) AS review_count," +
                         "(SELECT MAX(reviewscore) AS highest_rated_movie FROM review r INNER JOIN movie m ON r.movieID=m.movieID WHERE r.userID=u.userID) AS score," +
@@ -153,7 +156,7 @@ public class DbUserRepository implements DbRepository<User> {
                 User user = new User();
                 user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
-                user.setAdmin(rs.getBoolean("admin"));
+                user.setStatus(rs.getString("status"));
                 stats.setUser(user);
                 
                 stats.setHighestRatedMovie(rs.getString("highest_rated_movie"));

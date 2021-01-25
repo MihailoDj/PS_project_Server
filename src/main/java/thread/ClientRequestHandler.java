@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import view.coordinator.ServerFormCoordinator;
 
 /**
  *
@@ -50,6 +51,8 @@ public class ClientRequestHandler extends Thread{
                             if (loggedInUser != null) {
                                 response.setResult(loggedInUser);
                                 this.user = loggedInUser;
+                                Controller.getInstance().updateUser(user);
+                                ServerFormCoordinator.getInstance().getMainContoller().setUpTableuserStatistics();
                             } else {
                                 response.setResult(null);
                             }

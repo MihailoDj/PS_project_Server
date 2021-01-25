@@ -6,19 +6,21 @@
 package view.controller;
 
 import controller.Controller;
-import domain.User;
 import domain.UserStatistics;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.table.TableColumnModel;
-import util.Constants;
 import view.coordinator.ServerFormCoordinator;
 import view.form.FrmMain;
 import view.form.component.table.UserStatisticsTableModel;
+import view.form.component.table.UserStatsticsTableModelRenderer;
 
 /**
  *
@@ -29,6 +31,7 @@ public class MainController {
 
     public MainController(FrmMain frmMain) {
         this.frmMain = frmMain;
+        addWindowListener();
         addActionListener();
     }
 
@@ -41,6 +44,16 @@ public class MainController {
         frmMain.setVisible(true);
         frmMain.setExtendedState( JFrame.MAXIMIZED_BOTH);
     }
+    
+    private void addWindowListener() {
+        frmMain.frmMainWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                Controller.getInstance().stopServer();
+            }
+            
+        });
+    }
 
     private void addActionListener() {
         frmMain.btnStartServerActionListener(new ActionListener() {
@@ -49,6 +62,8 @@ public class MainController {
                 Controller.getInstance().startServer();
                 frmMain.getBtnStartServer().setEnabled(false);
                 frmMain.getBtnStopServer().setEnabled(true);
+                frmMain.getLblServerStatus().setText("SERVER IS RUNNING");
+                frmMain.getLblServerStatus().setForeground(Color.green.darker());
             }
         });
         frmMain.btnStopServerActionListener(new ActionListener() {
@@ -57,6 +72,8 @@ public class MainController {
                 Controller.getInstance().stopServer();
                 frmMain.getBtnStartServer().setEnabled(true);
                 frmMain.getBtnStopServer().setEnabled(false);
+                frmMain.getLblServerStatus().setText("SERVER IS CLOSED");
+                frmMain.getLblServerStatus().setForeground(Color.red);
             }
         });
         frmMain.jmiNewMovieAddActionListener(new java.awt.event.ActionListener() {
@@ -132,8 +149,10 @@ public class MainController {
             UserStatisticsTableModel ustm = new UserStatisticsTableModel(userStats);
             frmMain.getTblUserStatistics().setModel(ustm);
             
+            
             TableColumnModel tcm = frmMain.getTblUserStatistics().getColumnModel();
 
+            tcm.getColumn(2).setCellRenderer(new UserStatsticsTableModelRenderer());
             frmMain.getTblUserStatistics().setAutoCreateRowSorter(true);
             frmMain.getTblUserStatistics().getTableHeader().setResizingAllowed(false);
 

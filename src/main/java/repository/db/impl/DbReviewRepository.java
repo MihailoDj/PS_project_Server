@@ -183,7 +183,7 @@ public class DbReviewRepository implements DbRepository<Review>{
                 user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setAdmin(rs.getBoolean("admin"));
+                user.setStatus(rs.getString("status"));
                 
                 review.setMovie(movie);
                 review.setUser(user);
@@ -244,7 +244,7 @@ public class DbReviewRepository implements DbRepository<Review>{
                 user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setAdmin(rs.getBoolean("admin"));
+                user.setStatus(rs.getString("status"));
                 
                 review.setMovie(movie);
                 review.setUser(user);

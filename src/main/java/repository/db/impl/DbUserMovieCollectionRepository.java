@@ -115,7 +115,7 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setAdmin(rs.getBoolean("admin"));
+                user.setStatus(rs.getString("status"));
                 
                 col.setMovie(movie);
                 col.setUser(user);
@@ -174,7 +174,7 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
                 user.setUserID(rs.getLong("userID"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setAdmin(rs.getBoolean("admin"));
+                user.setStatus(rs.getString("status"));
                 
                 col.setMovie(movie);
                 col.setUser(user);
