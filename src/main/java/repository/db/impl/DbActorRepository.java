@@ -24,7 +24,7 @@ import repository.db.DbRepository;
  */
 public class DbActorRepository implements DbRepository<Actor>{
     @Override
-    public List<Actor> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         try {
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             List<Actor> actors = new ArrayList<Actor>();

@@ -43,7 +43,7 @@ public class DbGenreRepository implements DbRepository<Genre>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     @Override
-    public List<Genre> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         try{
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             List<Genre> genres = new ArrayList<Genre>();

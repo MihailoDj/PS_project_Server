@@ -202,7 +202,7 @@ public class DbReviewRepository implements DbRepository<Review>{
     }
 
     @Override
-    public List<Review> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         try {
             List<Review> reviews = new ArrayList<>();
             Connection connection = DbConnectionFactory.getInstance().getConnection();

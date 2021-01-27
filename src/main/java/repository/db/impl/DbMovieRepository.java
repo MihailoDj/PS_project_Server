@@ -38,7 +38,7 @@ import repository.db.DbRepository;
 public class DbMovieRepository implements DbRepository<Movie>{
 
     @Override
-    public List<Movie> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         try {
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             List<Movie> movies = new ArrayList<Movie>();

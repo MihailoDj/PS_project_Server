@@ -18,10 +18,15 @@ import domain.UserStatistics;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import operation.AbstractGenericOperation;
+import operation.movie.DeleteMovie;
+import operation.movie.InsertMovie;
+import operation.movie.UpdateMovie;
 import repository.Repository;
 import repository.db.DbRepository;
 import repository.db.impl.DbActorRepository;
 import repository.db.impl.DbDirectorRepository;
+import repository.db.impl.DbGenericRepository;
 import repository.db.impl.DbGenreRepository;
 import repository.db.impl.DbMovieRepository;
 import repository.db.impl.DbProductionCompanyRepository;
@@ -46,6 +51,8 @@ public class Controller {
     private final Repository collectionRepository;
     private final Repository reviewRepository;
     
+    private final Repository genericRepository;
+    
     private List<ClientRequestHandler> clients;
     private Server server;
     
@@ -62,6 +69,7 @@ public class Controller {
         reviewRepository = new DbReviewRepository();
         
         clients = new ArrayList<>();
+        genericRepository = new DbGenericRepository();
     }
     
     public static Controller getInstance() {
@@ -206,46 +214,18 @@ public class Controller {
     }
     
     public void insertMovie(Movie movie) throws Exception {
-        ((DbRepository)movieRepository).connect();
-        
-        try{
-            movieRepository.insert(movie);
-            ((DbRepository)movieRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)movieRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)movieRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new InsertMovie();
+        operation.execute(movie);
     }
     
     public void deleteMovie(Movie movie) throws Exception {
-        ((DbRepository)movieRepository).connect();
-        
-        try{
-            movieRepository.delete(movie);
-            ((DbRepository)movieRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)movieRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)movieRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new DeleteMovie();
+        operation.execute(movie);
     }
 
     public void updateMovie(Movie movie) throws Exception {
-        ((DbRepository)movieRepository).connect();
-        
-        try{
-            ((DbRepository)movieRepository).update(movie);
-            ((DbRepository)movieRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)movieRepository).rollback();
-            throw e;
-        }
+        AbstractGenericOperation operation = new UpdateMovie();
+        operation.execute(movie);
     }
     
     public List<Movie> selectMovies(Movie movie) throws Exception {

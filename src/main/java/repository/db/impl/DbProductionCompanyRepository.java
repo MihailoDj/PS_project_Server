@@ -49,7 +49,7 @@ public class DbProductionCompanyRepository implements DbRepository<ProductionCom
     }
 
     @Override
-    public List<ProductionCompany> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         try{
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             List<ProductionCompany> productionCompanies = new ArrayList<ProductionCompany>();

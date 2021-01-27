@@ -6,6 +6,7 @@
 package repository.db.impl;
 
 import domain.Role;
+import java.sql.ResultSet;
 import java.util.List;
 import repository.db.DbRepository;
 
@@ -41,7 +42,7 @@ public class DbRoleRepository implements DbRepository<Role>{
     }
 
     @Override
-    public List<Role> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

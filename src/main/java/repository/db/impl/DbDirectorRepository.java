@@ -26,7 +26,7 @@ import repository.db.DbRepository;
 public class DbDirectorRepository implements DbRepository<Director>{
 
     @Override
-    public List<Director> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         try {
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             List<Director> directors = new ArrayList<Director>();

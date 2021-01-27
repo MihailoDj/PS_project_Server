@@ -26,7 +26,7 @@ import repository.db.DbRepository;
 public class DbUserRepository implements DbRepository<User> {
 
     @Override
-    public List<User> selectAll() throws Exception{
+    public List selectAll() throws Exception{
         try {
             Connection connection = DbConnectionFactory.getInstance().getConnection();
             List<User> users = new ArrayList<User>();

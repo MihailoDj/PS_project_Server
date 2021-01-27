@@ -135,7 +135,7 @@ public class DbUserMovieCollectionRepository implements DbRepository<UserMovieCo
     }
 
     @Override
-    public List<UserMovieCollection> selectAll() throws Exception {
+    public List selectAll() throws Exception {
         try {
             List<UserMovieCollection> collection = new ArrayList<>();
             
