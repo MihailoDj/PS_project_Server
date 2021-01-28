@@ -19,20 +19,34 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import operation.AbstractGenericOperation;
+import operation.actor.DeleteActor;
+import operation.actor.InsertActor;
+import operation.actor.SelectAllActors;
+import operation.actor.genre.SelectAllGenres;
+import operation.actor.productionCompany.SelectAllProductionCompanies;
+import operation.director.DeleteDirector;
+import operation.director.InsertDirector;
+import operation.director.SelectAllDirectors;
+import operation.director.UpdateDirector;
 import operation.movie.DeleteMovie;
 import operation.movie.InsertMovie;
+import operation.movie.SelectAllMovies;
+import operation.movie.SelectMovies;
 import operation.movie.UpdateMovie;
-import repository.Repository;
-import repository.db.DbRepository;
-import repository.db.impl.DbActorRepository;
-import repository.db.impl.DbDirectorRepository;
-import repository.db.impl.DbGenericRepository;
-import repository.db.impl.DbGenreRepository;
-import repository.db.impl.DbMovieRepository;
-import repository.db.impl.DbProductionCompanyRepository;
-import repository.db.impl.DbReviewRepository;
-import repository.db.impl.DbUserMovieCollectionRepository;
-import repository.db.impl.DbUserRepository;
+import operation.review.DeleteReview;
+import operation.review.InsertReview;
+import operation.review.SelectAllReviews;
+import operation.review.SelectReviews;
+import operation.review.UpdateReview;
+import operation.user.DeleteUser;
+import operation.user.InsertUser;
+import operation.user.SelectAllUsers;
+import operation.user.UpdateUser;
+import operation.userMovieCollection.DeleteCollection;
+import operation.userMovieCollection.InsertCollection;
+import operation.userMovieCollection.SelectAllCollections;
+import operation.userMovieCollection.SelectCollections;
+import operation.userStatistics.SelectUserStatistics;
 import server.Server;
 import thread.ClientRequestHandler;
 import view.coordinator.ServerFormCoordinator;
@@ -42,34 +56,14 @@ import view.coordinator.ServerFormCoordinator;
  * @author Mihailo
  */
 public class Controller {
-    private final Repository userRepository;
-    private final Repository directorRepository;
-    private final Repository movieRepository;
-    private final Repository actorRepository;
-    private final Repository genreRepository;
-    private final Repository productionCompanyRepository;
-    private final Repository collectionRepository;
-    private final Repository reviewRepository;
-    
-    private final Repository genericRepository;
-    
     private List<ClientRequestHandler> clients;
     private Server server;
     
     private static Controller controller;
 
     private Controller() {
-        userRepository = new DbUserRepository();
-        directorRepository = new DbDirectorRepository();
-        movieRepository = new DbMovieRepository();
-        actorRepository = new DbActorRepository();
-        genreRepository = new DbGenreRepository();
-        productionCompanyRepository = new DbProductionCompanyRepository();
-        collectionRepository = new DbUserMovieCollectionRepository();
-        reviewRepository = new DbReviewRepository();
         
         clients = new ArrayList<>();
-        genericRepository = new DbGenericRepository();
     }
     
     public static Controller getInstance() {
@@ -80,7 +74,10 @@ public class Controller {
     }
     
     public User login(String username, String password) throws Exception{
-        List<User> users = userRepository.selectAll();
+        AbstractGenericOperation operation = new SelectAllUsers();
+        operation.execute(new User());
+        
+        List<User> users = ((SelectAllUsers)operation).getUsers();
         
         for (User user : users) {
             if(user.getUsername().equals(username)&& user.getPassword().equals(password)){
@@ -93,123 +90,60 @@ public class Controller {
     }
     
     public List<User> selectUser(User user) throws Exception{
-        List<User> users = null;
+        AbstractGenericOperation operation = new SelectAllUsers();
+        operation.execute(new User());
         
-        try {
-            users = userRepository.select(user);
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        
+        List<User> users = ((SelectAllUsers)operation).getUsers();
         return users;
     }
     
     public void updateUser(User user) throws Exception{
-        ((DbRepository)userRepository).connect();
-        
-        try{
-            ((DbRepository)userRepository).update(user);
-            ((DbRepository)userRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)userRepository).rollback();
-            throw e;
-        }
+        AbstractGenericOperation operation = new UpdateUser();
+        operation.execute(user);
     }
     
     public void insertUser(User user) throws Exception{
-        ((DbRepository)userRepository).connect();
-        
-        try{
-            userRepository.insert(user);
-            ((DbRepository)userRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)userRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)userRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new InsertUser();
+        operation.execute(user);
     }
     
     public void deleteUser(User user) throws Exception {
-        ((DbRepository)userRepository).connect();
-        
-        try{
-            userRepository.delete(user);
-            ((DbRepository)userRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)userRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)userRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new DeleteUser();
+        operation.execute(user);
     }
     
     public List<Director> selectAllDirectors() throws Exception{
-        List<Director> directors = null;
-        
-        try {
-            directors = directorRepository.selectAll();
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        
+        AbstractGenericOperation operation = new SelectAllDirectors();
+        operation.execute(new Director());
+        List<Director> directors = ((SelectAllDirectors)operation).getDirectors();
         return directors;
     }
     
     public List<Movie> selectAllMovies() throws Exception {
-        List<Movie> movies = null;
-        
-        try{
-            movies = movieRepository.selectAll();
-        }catch(Exception e){
-            e.printStackTrace();
-            throw e;
-        }
-        
+        AbstractGenericOperation operation = new SelectAllMovies();
+        operation.execute(new Movie());
+        List<Movie> movies = ((SelectAllMovies)operation).getMovies();
         return movies;
     }
     
     public List<Actor> selectAllActors() throws Exception{
-        List<Actor> actors = null;
-        
-        try {
-            actors = actorRepository.selectAll();
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        
+        AbstractGenericOperation operation = new SelectAllActors();
+        operation.execute(new Actor());
+        List<Actor> actors = ((SelectAllActors)operation).getActors();
         return actors;
     }
     
     public List<Genre> selectAllGenres() throws Exception{
-        List<Genre> genres = null;
-        
-        try {
-            genres = genreRepository.selectAll();
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        
+        AbstractGenericOperation operation = new SelectAllGenres();
+        operation.execute(new Genre());
+        List<Genre> genres = ((SelectAllGenres)operation).getGenres();
         return genres;
     }
     
     public List<ProductionCompany> selectAllProductionCompanies() throws Exception{
-        List<ProductionCompany> productionCompanies = null;
-        
-        try {
-            productionCompanies = productionCompanyRepository.selectAll();
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        
+        AbstractGenericOperation operation = new SelectAllProductionCompanies();
+        operation.execute(new ProductionCompany());
+        List<ProductionCompany> productionCompanies = ((SelectAllProductionCompanies)operation).getProductionCompanies();
         return productionCompanies;
     }
     
@@ -229,238 +163,103 @@ public class Controller {
     }
     
     public List<Movie> selectMovies(Movie movie) throws Exception {
-        List<Movie> movies = null;
-        
-        try{
-            movies = movieRepository.select(movie);
-        }catch(Exception e){
-            e.printStackTrace();
-            throw e;
-        }
-        
+        AbstractGenericOperation operation = new SelectMovies();
+        operation.execute(movie);
+        List<Movie> movies = ((SelectMovies)operation).getMovies();
         return movies;
     }
     
     public void insertDirector(Director director) throws Exception {
-        ((DbRepository)directorRepository).connect();
-        
-        try{
-            directorRepository.insert(director);
-            ((DbRepository)directorRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)directorRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)directorRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new InsertDirector();
+        operation.execute(director);
     }
     
     public void deleteDirector(Director director) throws Exception {
-        ((DbRepository)directorRepository).connect();
-        
-        try{
-            directorRepository.delete(director);
-            ((DbRepository)directorRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)directorRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)directorRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new DeleteDirector();
+        operation.execute(director);
     }
 
     public void updateDirector(Director director) throws Exception {
-        ((DbRepository)directorRepository).connect();
-        
-        try{
-            ((DbRepository)directorRepository).update(director);
-            ((DbRepository)directorRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)directorRepository).rollback();
-            throw e;
-        }
+        AbstractGenericOperation operation = new UpdateDirector();
+        operation.execute(director);
     }
     
     public void insertActor(Actor actor) throws Exception {
-        ((DbRepository)actorRepository).connect();
-        
-        try{
-            actorRepository.insert(actor);
-            ((DbRepository)actorRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)actorRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)actorRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new InsertActor();
+        operation.execute(actor);
     }
     
     public void deleteActor(Actor actor) throws Exception {
-        ((DbRepository)actorRepository).connect();
-        
-        try{
-            actorRepository.delete(actor);
-            ((DbRepository)actorRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)actorRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)actorRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new DeleteActor();
+        operation.execute(actor);
     }
 
     public void updateActor(Actor actor) throws Exception {
-        ((DbRepository)actorRepository).connect();
-        
-        try{
-            ((DbRepository)actorRepository).update(actor);
-            ((DbRepository)actorRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)actorRepository).rollback();
-            throw e;
-        }
+        AbstractGenericOperation operation = new DeleteActor();
+        operation.execute(actor);
     }
     
     public void insertCollection(UserMovieCollection collection) throws Exception{
-        ((DbRepository)collectionRepository).connect();
-        
-        try{
-            collectionRepository.insert(collection);
-            ((DbRepository)collectionRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)collectionRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)collectionRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new InsertCollection();
+        operation.execute(collection);
     }
     
     public List<UserMovieCollection> selectAllCollections() throws Exception{
-        List<UserMovieCollection> collection = null;
+        AbstractGenericOperation operation = new SelectAllCollections();
+        operation.execute(new UserMovieCollection());
+        List<UserMovieCollection> collections = ((SelectAllCollections)operation).getCollections();
         
-        try {
-            collection = collectionRepository.selectAll();
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        
-        return collection;
+        return collections;
     }
     
     public List<UserMovieCollection> selectCollections(UserMovieCollection col) throws Exception{
-        List<UserMovieCollection> collection = null;
+        AbstractGenericOperation operation = new SelectCollections();
+        operation.execute(col);
+        List<UserMovieCollection> collections = ((SelectCollections)operation).getCollections();
         
-        try {
-            collection = collectionRepository.select(col);
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        
-        return collection;
+        return collections;
     }
     
     public void deleteCollection(UserMovieCollection collection) throws Exception{
-        ((DbRepository)collectionRepository).connect();
-        
-        try{
-            collectionRepository.delete(collection);
-            ((DbRepository)collectionRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)collectionRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)collectionRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new DeleteCollection();
+        operation.execute(collection);
     }
     
     public void insertReview(Review review) throws Exception{
-        ((DbRepository)reviewRepository).connect();
-        
-        try{
-            reviewRepository.insert(review);
-            ((DbRepository)reviewRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)reviewRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)reviewRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new InsertReview();
+        operation.execute(review);
     }
 
     public List<Review> selectAllReviews() throws Exception{
-        List<Review> reviews = null;
-        
-        try {
-            reviews = reviewRepository.selectAll();
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        AbstractGenericOperation operation = new SelectAllReviews();
+        operation.execute(new Review());
+        List<Review> reviews = ((SelectAllReviews)operation).getReviews();
         
         return reviews;
     }
     
     public void deleteReview(Review review) throws Exception{
-        ((DbRepository)reviewRepository).connect();
-        
-        try{
-            reviewRepository.delete(review);
-            ((DbRepository)reviewRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)reviewRepository).rollback();
-            throw e;
-        } finally {
-            ((DbRepository)reviewRepository).disconnect();
-        }
+        AbstractGenericOperation operation = new DeleteReview();
+        operation.execute(review);
     }
     
     public void updateReview (Review review) throws Exception {
-        ((DbRepository)reviewRepository).connect();
-        
-        try{
-            ((DbRepository)reviewRepository).update(review);
-            ((DbRepository)reviewRepository).commit();
-        }catch(Exception e){
-            e.printStackTrace();
-            ((DbRepository)reviewRepository).rollback();
-            throw e;
-        }
+        AbstractGenericOperation operation = new UpdateReview();
+        operation.execute(review);
     }
     
     public List<Review> selectReviews(Review review) throws Exception{
-        List<Review> reviews = null;
-        
-        try {
-            reviews = reviewRepository.select(review);
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        AbstractGenericOperation operation = new SelectReviews();
+        operation.execute(review);
+        List<Review> reviews = ((SelectReviews)operation).getReviews();
         
         return reviews;
     }
     
     public List<UserStatistics> selectUserStatistics() throws Exception{
-        List<UserStatistics> userStats = null;
-        
-        try {
-            userStats = ((DbUserRepository)userRepository).selectUserStatistics();
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        AbstractGenericOperation operation = new SelectUserStatistics();
+        operation.execute(new UserStatistics());
+        List<UserStatistics> userStats = ((SelectUserStatistics)operation).getUserStats();
         
         return userStats;
     }

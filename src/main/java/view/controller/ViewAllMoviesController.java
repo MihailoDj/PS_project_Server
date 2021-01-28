@@ -8,7 +8,6 @@ package view.controller;
 import com.github.lgooddatepicker.tableeditors.DateTableEditor;
 import component.MovieTableModel;
 import controller.Controller;
-import domain.Director;
 import domain.Movie;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,8 +18,6 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
@@ -163,12 +160,8 @@ public class ViewAllMoviesController {
     }
 
     public void setUpTableColumns() throws Exception {
-        List<Director> directors = Controller.getInstance().selectAllDirectors();
-        JComboBox cbDirector = new JComboBox(directors.toArray());
 
         TableColumnModel tcm = frmViewMovies.getTblMovies().getColumnModel();
-        TableColumn tcDirector = tcm.getColumn(5);
-        tcDirector.setCellEditor(new DefaultCellEditor(cbDirector));
 
         TableColumn tcReleaseDate = tcm.getColumn(2);
         tcReleaseDate.setCellEditor(new DateTableEditor());

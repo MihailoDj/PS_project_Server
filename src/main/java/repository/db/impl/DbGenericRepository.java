@@ -6,14 +6,11 @@
 package repository.db.impl;
 
 import domain.GenericEntity;
-import domain.Movie;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import repository.db.DbConnectionFactory;
@@ -112,13 +109,51 @@ public class DbGenericRepository implements DbRepository<GenericEntity>{
     }
 
     @Override
-    public List<GenericEntity> select(GenericEntity obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ResultSet select(GenericEntity entity) throws Exception {
+        try {
+            Connection connection = DbConnectionFactory.getInstance().getConnection();
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT ").append(entity.getColumnNamesForSelect())
+                    .append(" FROM ").append(entity.getTableForSelect());
+            
+            if (!entity.getConditionForSelectSpecific().equals("")) {
+                sb.append(" WHERE ").append(entity.getConditionForSelectSpecific());
+            }
+            
+            String query = sb.toString();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            
+            return rs;
+        } catch (SQLException ex) {
+            Logger.getLogger(DbGenericRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception("Error loading movies!");
+        }
     }
 
     @Override
-    public List<GenericEntity> selectAll() throws Exception {
-        return null;
+    public ResultSet selectAll(GenericEntity entity) throws Exception {
+        try {
+            Connection connection = DbConnectionFactory.getInstance().getConnection();
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT ").append(entity.getColumnNamesForSelect())
+                    .append(" FROM ").append(entity.getTableForSelect());
+            
+            if (!entity.getConditionForSelect().equals("")) {
+                sb.append(" WHERE ").append(entity.getConditionForSelect());
+            }
+            
+            String query = sb.toString();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            
+            return rs;
+        } catch (SQLException ex) {
+            Logger.getLogger(DbGenericRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception("Error loading movies!");
+        }
     }
     
 }
