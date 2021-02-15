@@ -56,7 +56,6 @@ public class ClientRequestHandler extends Thread{
                             } else {
                                 response.setResult(null);
                             }
-                            sendServerResponse(socket, response);
                             break;
                         case INSERT_USER:
                             User userInsert = (User)request.getArgument();
@@ -73,20 +72,16 @@ public class ClientRequestHandler extends Thread{
                         case SELECT_MOVIES:
                             Movie movieSelect = (Movie)request.getArgument();
                             response.setResult(Controller.getInstance().selectMovies(movieSelect));
-                            sendServerResponse(socket, response);
                             break;
                         case SELECT_ALL_MOVIES:
                             response.setResult(Controller.getInstance().selectAllMovies());
-                            sendServerResponse(socket, response);
                             break;
                         case SELECT_ALL_COLLECTIONS:
                             response.setResult(Controller.getInstance().selectAllCollections());
-                            sendServerResponse(socket, response);
                             break;
                         case SELECT_COLLECTIONS:
                             UserMovieCollection collectionSelect = (UserMovieCollection)request.getArgument();
                             response.setResult(Controller.getInstance().selectCollections(collectionSelect));
-                            sendServerResponse(socket, response);
                             break;
                         case INSERT_COLLECTION:
                             UserMovieCollection collectionInsert = (UserMovieCollection)request.getArgument();
@@ -98,12 +93,10 @@ public class ClientRequestHandler extends Thread{
                             break;
                         case SELECT_ALL_REVIEWS:
                             response.setResult(Controller.getInstance().selectAllReviews());
-                            sendServerResponse(socket, response);
                             break;
                         case SELECT_REVIEWS:
                             Review reviewSelect = (Review)request.getArgument();
                             response.setResult(Controller.getInstance().selectReviews(reviewSelect));
-                            sendServerResponse(socket, response);
                             break;
                         case INSERT_REVIEW:
                             Review reviewInsert = (Review)request.getArgument();
@@ -122,6 +115,7 @@ public class ClientRequestHandler extends Thread{
                     ex.printStackTrace();
                     response.setException(ex);
                 }
+                sendServerResponse(socket, response);
             }
     }
 
