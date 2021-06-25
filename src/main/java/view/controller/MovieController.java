@@ -512,8 +512,19 @@ public class MovieController {
         movie.setReleaseDate(frmMovie.getReleaseDate().getDate());
 
         movie.setRoles(((RoleTableModel)frmMovie.getTblRoles().getModel()).getAll());
+        for (Role r : movie.getRoles()) {
+            r.setMovie(movie);
+        }
+        
         movie.setMovieGenres(((MovieGenreTableModel)frmMovie.getTblMovieGenre().getModel()).getAll());
+        for (MovieGenre mg : movie.getMovieGenres()) {
+            mg.setMovie(movie);
+        }
+        
         movie.setProductions(((ProductionTableModel)frmMovie.getTblProduction().getModel()).getAll());
+        for (Production p : movie.getProductions()) {
+            p.setMovie(movie);
+        }
                 
         MoviePoster moviePoster = new MoviePoster();
         Icon icon = frmMovie.getLblPoster().getIcon();

@@ -22,8 +22,9 @@ import operation.AbstractGenericOperation;
 import operation.actor.DeleteActor;
 import operation.actor.InsertActor;
 import operation.actor.SelectAllActors;
-import operation.actor.genre.SelectAllGenres;
-import operation.actor.productionCompany.SelectAllProductionCompanies;
+import operation.actor.UpdateActor;
+import operation.genre.SelectAllGenres;
+import operation.productionCompany.SelectAllProductionCompanies;
 import operation.director.DeleteDirector;
 import operation.director.InsertDirector;
 import operation.director.SelectAllDirectors;
@@ -195,7 +196,7 @@ public class Controller {
     }
 
     public void updateActor(Actor actor) throws Exception {
-        AbstractGenericOperation operation = new DeleteActor();
+        AbstractGenericOperation operation = new UpdateActor();
         operation.execute(actor);
     }
     

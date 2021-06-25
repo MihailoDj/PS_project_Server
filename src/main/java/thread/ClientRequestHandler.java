@@ -64,6 +64,7 @@ public class ClientRequestHandler extends Thread{
                         case UPDATE_USER:
                             User userUpdate = (User)request.getArgument();
                             Controller.getInstance().updateUser(userUpdate);
+                            ServerFormCoordinator.getInstance().getMainContoller().setUpTableuserStatistics();
                             break;
                         case DELETE_USER:
                             User userDelete = (User)request.getArgument();

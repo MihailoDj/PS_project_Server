@@ -122,6 +122,9 @@ public class DbGenericRepository implements DbRepository<GenericEntity>{
             }
             
             String query = sb.toString();
+            
+            System.out.println(query);
+            
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             
