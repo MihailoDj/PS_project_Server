@@ -30,6 +30,7 @@ public class SelectUser extends AbstractGenericOperation{
         while (rs.next()) {
             User user = new User(); 
             user.setUserID(rs.getLong("userID"));
+            user.setEmail(rs.getString("email"));
             user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
             user.setStatus(rs.getString("status"));
