@@ -50,6 +50,7 @@ List<UserMovieCollection> collections = new ArrayList<>();
             movie.setReleaseDate(rs.getObject("releaseDate", LocalDate.class));
             movie.setDescription(rs.getString("description"));
             movie.setScore(Math.floor(rs.getDouble("score")* 100) / 100);
+            movie.setDuration(rs.getInt("duration"));
 
             Director director = new Director();
             director.setDirectorID(rs.getLong("directorID"));

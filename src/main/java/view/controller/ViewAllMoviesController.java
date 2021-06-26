@@ -177,6 +177,7 @@ public class ViewAllMoviesController {
         tcm.getColumn(3).setPreferredWidth(75);
         tcm.getColumn(4).setPreferredWidth(15);
         tcm.getColumn(5).setPreferredWidth(100);
+        tcm.getColumn(6).setPreferredWidth(15);
     }
 
     public void enableButtons() {

@@ -115,6 +115,7 @@ public class SelectAllMovies extends AbstractGenericOperation{
         movie.setScore(Math.floor(rsMovie.getDouble("scr")* 100) / 100);
         movie.setDirector(director);
         movie.setMoviePoster(moviePoster);
+        movie.setDuration(rsMovie.getInt("duration"));
         
         return movie;
     }

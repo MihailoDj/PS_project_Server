@@ -111,7 +111,7 @@ public class MovieController {
                     movie.setRoles(roles);
                     movie.setMovieGenres(movieGenres);
                     movie.setProductions(productions);
-
+                    movie.setDuration(Integer.parseInt(frmMovie.getTxtDuration().getText()));
                     
                     Controller.getInstance().insertMovie(movie);
                     JOptionPane.showMessageDialog(frmMovie, "Movie successfully saved!");
@@ -413,6 +413,7 @@ public class MovieController {
                 frmMovie.getTxtScore().setEditable(false);
                 frmMovie.getCbDirector().setEnabled(true);
                 frmMovie.getReleaseDate().setEnabled(true);
+                frmMovie.getTxtDuration().setEnabled(true);
                 break;
             case FORM_VIEW:
                 movie = (Movie) ServerFormCoordinator.getInstance().getParam(Constants.PARAM_MOVIE);
@@ -426,6 +427,7 @@ public class MovieController {
                 frmMovie.getTxtScore().setText(String.valueOf(movie.getScore()));
                 frmMovie.getReleaseDate().setDate(movie.getReleaseDate());
                 frmMovie.getCbDirector().getModel().setSelectedItem(movie.getDirector());
+                frmMovie.getTxtDuration().setText(String.valueOf(movie.getDuration()));
                 
                 RoleTableModel rtm = new RoleTableModel(movie.getRoles());
                 frmMovie.getTblRoles().setModel(rtm);
@@ -452,6 +454,7 @@ public class MovieController {
                 frmMovie.getTxtScore().setEditable(false);
                 frmMovie.getCbDirector().setEnabled(false);
                 frmMovie.getReleaseDate().setEnabled(false);
+                frmMovie.getTxtDuration().setEnabled(false);
                 
                 frmMovie.getCbActors().setEnabled(false);
                 frmMovie.getCbGenres().setEnabled(false);
@@ -481,6 +484,7 @@ public class MovieController {
                 frmMovie.getTxtScore().setEditable(false);
                 frmMovie.getCbDirector().setEnabled(true);
                 frmMovie.getReleaseDate().setEnabled(true);
+                frmMovie.getTxtDuration().setEnabled(true);
                 
                 frmMovie.getCbActors().setEnabled(true);
                 frmMovie.getCbGenres().setEnabled(true);
@@ -510,6 +514,7 @@ public class MovieController {
         movie.setScore(Double.parseDouble(frmMovie.getTxtScore().getText()));
         movie.setDirector((Director) frmMovie.getCbDirector().getSelectedItem());
         movie.setReleaseDate(frmMovie.getReleaseDate().getDate());
+        movie.setDuration(Integer.parseInt(frmMovie.getTxtDuration().getText()));
 
         movie.setRoles(((RoleTableModel)frmMovie.getTblRoles().getModel()).getAll());
         for (Role r : movie.getRoles()) {
