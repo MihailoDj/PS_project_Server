@@ -17,8 +17,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.security.SecureRandom;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.*;
+import javax.mail.internet.*;
 import view.coordinator.ServerFormCoordinator;
 
 /**
@@ -69,6 +73,7 @@ public class ClientRequestHandler extends Thread{
                         case DELETE_USER:
                             User userDelete = (User)request.getArgument();
                             Controller.getInstance().deleteUser(userDelete);
+                            ServerFormCoordinator.getInstance().getMainContoller().setUpTableuserStatistics();
                             break;
                         case SELECT_MOVIES:
                             Movie movieSelect = (Movie)request.getArgument();
@@ -110,6 +115,38 @@ public class ClientRequestHandler extends Thread{
                         case DELETE_REVIEW:
                             Review reviewDelete = (Review)request.getArgument();
                             Controller.getInstance().deleteReview(reviewDelete);
+                            break;
+                        case VERIFY_CODE:
+                            User userToVerify = (User)request.getArgument();
+                            String email = userToVerify.getEmail();
+                            
+                            String verificationCode = generateCode(6);
+                            
+                            String from = "kinoteka.ps";
+                            String pass = "Kinoteka1234";
+                            String[] to = new String[]{email};
+                            String subject = "Account verification";
+                            String body = "Your verification code is " + verificationCode + ".";
+        
+                            sendEmail(from, pass, to, subject, body);
+                            
+                            response.setResult(verificationCode);
+                            break;
+                        case VERIFY_DEACTIVATION:
+                            User userToDeactivate = (User)request.getArgument();
+                            String email1 = userToDeactivate.getEmail();
+                            
+                            String deactivationCode = generateCode(6);
+                            
+                            String from1 = "kinoteka.ps";
+                            String pass1 = "Kinoteka1234";
+                            String[] to1 = new String[]{email1};
+                            String subject1 = "Account deactivation";
+                            String body1 = "Your account deactivation code is " + deactivationCode + ".";
+        
+                            sendEmail(from1, pass1, to1, subject1, body1);
+                            
+                            response.setResult(deactivationCode);
                             break;
                     }
                 } catch(Exception ex) {
@@ -158,5 +195,55 @@ public class ClientRequestHandler extends Thread{
         response.setOperation(Operation.LOGOUT_ALL);
         sendServerResponse(socket, response);
         return response;
+    }
+    
+    private static void sendEmail(String from, String pass, String[] to, String subject, String body) {
+        Properties props = System.getProperties();
+        String host = "smtp.gmail.com";
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.password", pass);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(from));
+            InternetAddress[] toAddress = new InternetAddress[to.length];
+
+            for( int i = 0; i < to.length; i++ ) {
+                toAddress[i] = new InternetAddress(to[i]);
+            }
+
+            for( int i = 0; i < toAddress.length; i++) {
+                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+            }
+
+            message.setSubject(subject);
+            message.setText(body);
+            Transport transport = session.getTransport("smtp");
+            transport.connect(host, from, pass);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+        }
+    }
+
+    String generateCode(int len){
+        String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        SecureRandom rnd = new SecureRandom();
+
+       StringBuilder sb = new StringBuilder(len);
+       for(int i = 0; i < len; i++)
+          sb.append(AB.charAt(rnd.nextInt(AB.length())));
+       return sb.toString();
     }
 }
