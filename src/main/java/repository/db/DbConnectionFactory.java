@@ -28,7 +28,7 @@ public class DbConnectionFactory {
     
     public Connection getConnection() throws Exception{
         if (connection == null || connection.isClosed()) {
-            String url = "jdbc:mysql://localhost:3306/psdb";
+            String url = "jdbc:mysql://localhost:3306/psdb?allowMultiQueries=true";
             String username = "root";
             String password = "";
             

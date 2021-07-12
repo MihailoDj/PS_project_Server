@@ -112,7 +112,7 @@ public class SelectAllMovies extends AbstractGenericOperation{
         movie.setName(rsMovie.getString("name"));
         movie.setReleaseDate(rsMovie.getObject("releaseDate", LocalDate.class));
         movie.setDescription(rsMovie.getString("description"));
-        movie.setScore(Math.floor(rsMovie.getDouble("scr")* 100) / 100);
+        movie.setScore(Math.floor(rsMovie.getDouble("score")* 100) / 100);
         movie.setDirector(director);
         movie.setMoviePoster(moviePoster);
         movie.setDuration(rsMovie.getInt("duration"));

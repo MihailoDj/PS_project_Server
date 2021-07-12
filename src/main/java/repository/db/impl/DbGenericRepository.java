@@ -38,6 +38,11 @@ public class DbGenericRepository implements DbRepository<GenericEntity>{
             
             sb.deleteCharAt(sb.length()-1);
             sb.append(")");
+            
+            if (!entity.getAdditionalQueries().isEmpty()) {
+                sb.append(entity.getAdditionalQueries());
+            }
+            
             String query = sb.toString();
             System.out.println(query);
             
